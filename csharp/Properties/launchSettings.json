@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Sudoku": {
+      "commandName": "Project",
+      "commandLineArgs": "sudoku.csv 1000000",
+      "workingDirectory": "..\\"
+    }
+  }
+}
