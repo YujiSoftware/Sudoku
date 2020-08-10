@@ -85,7 +85,7 @@ namespace Sudoku
                 }
 
                 Sudoku newSudoku = new Sudoku(sudoku);
-                newSudoku.Update(index, ToNum(bit));
+                newSudoku.Update(index, (byte)(i + 1));
 
                 byte[] answer = Solve(newSudoku);
                 if (answer != null)

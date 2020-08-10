@@ -83,7 +83,7 @@ func solveInternal(s *sudoku) (board, error) {
 			columns: s.columns,
 			regions: s.regions,
 		}
-		newS.update(index, toNum(int(bit)))
+		newS.update(index, uint8(i+1))
 
 		if answer, err := solveInternal(newS); err == nil {
 			return answer, nil

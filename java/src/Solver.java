@@ -66,7 +66,7 @@ public class Solver {
 			}
 
 			Sudoku newSudoku = new Sudoku(sudoku);
-			newSudoku.update(index, toNum(bit));
+			newSudoku.update(index, (byte) (i + 1));
 
 			byte[] answer = solve(newSudoku);
 			if (answer != null) {
