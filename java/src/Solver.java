@@ -30,9 +30,8 @@ public class Solver {
 					return null;
 				}
 
-				int highest = Integer.highestOneBit(candidate);
-				int lowest = Integer.lowestOneBit(candidate);
-				if (highest == lowest) {
+				int lowest = lowestOneBit(candidate);
+				if (candidate == lowest) {
 					sudoku.update(i, toNum(lowest));
 					updated = true;
 				}
@@ -51,7 +50,7 @@ public class Solver {
 				continue;
 			}
 
-			int c = Integer.bitCount(sudoku.getCandidateBit(i));
+			int c = bitCount(sudoku.getCandidateBit(i));
 			if (c < count) {
 				count = c;
 				index = i;
@@ -76,6 +75,21 @@ public class Solver {
 		}
 
 		return null;
+	}
+
+	private static int bitCount(int value) {
+		int sum = 0;
+		for (int i = 0; i < 9; i++) {
+			if ((value & 1 << i) != 0) {
+				sum++;
+			}
+		}
+
+		return sum;
+	}
+
+	private static int lowestOneBit(int i) {
+		return i & -i;
 	}
 
 	private static byte toNum(int bit) {

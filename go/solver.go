@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"math"
-	"math/bits"
 )
 
 type sudoku struct {
@@ -43,9 +42,8 @@ func solveInternal(s *sudoku) (board, error) {
 				return s.answer, fmt.Errorf("Unresolved")
 			}
 
-			highest := highestOneBit(candidate)
 			lowest := lowestOneBit(candidate)
-			if highest == lowest {
+			if candidate == lowest {
 				s.update(i, toNum(int(lowest)))
 				updated = true
 			}
@@ -64,7 +62,7 @@ func solveInternal(s *sudoku) (board, error) {
 			continue
 		}
 
-		c := bits.OnesCount16(s.getCandidateBit(i))
+		c := bitCount(s.getCandidateBit(i))
 		if c < count {
 			count = c
 			index = i
@@ -118,8 +116,15 @@ func (s *sudoku) getCandidateBit(index int) uint16 {
 	return ^bit & 0x1FF
 }
 
-func highestOneBit(i uint16) uint16 {
-	return i & (math.MaxUint16 >> bits.LeadingZeros16(i))
+func bitCount(value uint16) int {
+	sum := 0
+	for i := 0; i < 9; i++ {
+		if (value & 1 << i) != 0 {
+			sum++
+		}
+	}
+
+	return sum
 }
 
 func lowestOneBit(i uint16) uint16 {

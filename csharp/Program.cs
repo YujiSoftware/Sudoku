@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace Sudoku
@@ -18,18 +17,18 @@ namespace Sudoku
 
             Console.Error.WriteLine("Start read...");
             var readTime = Stopwatch.StartNew();
-            read(file, quizzes, solutions);
+            Read(file, quizzes, solutions);
             readTime.Stop();
 
             Console.Error.WriteLine("Start solve...");
             var solveTime = Stopwatch.StartNew();
-            solve(quizzes, solutions);
+            Solve(quizzes, solutions);
             solveTime.Stop();
 
             Console.Error.WriteLine($"{readTime.ElapsedMilliseconds}ms\t{solveTime.ElapsedMilliseconds}ms");
         }
 
-        private static void read(string file, byte[][] quizzes, byte[][] solutions)
+        private static void Read(string file, byte[][] quizzes, byte[][] solutions)
         {
             using (var reader = new StreamReader(file))
             {
@@ -69,22 +68,34 @@ namespace Sudoku
             }
         }
 
-        private static void solve(byte[][] quizzes, byte[][] solutions)
+        private static void Solve(byte[][] quizzes, byte[][] solutions)
         {
             for (int i = 0; i < quizzes.Length; i++)
             {
                 var answer = Solver.Solve(quizzes[i]);
 
-                if (answer == null || !answer.SequenceEqual(solutions[i]))
+                if (answer == null || !Valid(answer, solutions[i]))
                 {
                     throw new Exception($"Invalid answer. [index={i}]");
                 }
 
-                // export(answer);
+                // Export(answer);
             }
         }
 
-        private static void export(byte[] answer)
+        private static bool Valid(byte[] answer, byte[] solution)
+        {
+            for (int i = 0; i < answer.Length; i++)
+            {
+                if (answer[i] != solution[i])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private static void Export(byte[] answer)
         {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < answer.Length; i++)

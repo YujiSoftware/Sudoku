@@ -25,12 +25,12 @@ func main() {
 	quizzes, solutions := read(file, rows)
 	endRead := time.Now()
 
-	fmt.Fprintln(os.Stderr, "Start resolve...")
+	fmt.Fprintln(os.Stderr, "Start solve...")
 	startSolve := time.Now()
 	for i := 0; i < len(quizzes); i++ {
 		answer, err := solve(quizzes[i])
 
-		if err != nil || answer != solutions[i] {
+		if err != nil || !valid(answer, solutions[i]) {
 			panic(fmt.Sprintf("Invalid answer. [index=%d]", i))
 		}
 
@@ -66,16 +66,15 @@ func read(file string, rows int) ([]board, []board) {
 		}
 	}
 
+	buf := make([]byte, 81)
 	for i := 0; i < rows; i++ {
-		tmp := make([]byte, 81)
-
 		// 問題
-		if _, err := io.ReadFull(reader, tmp); err != nil {
+		if _, err := io.ReadFull(reader, buf); err != nil {
 			panic(err)
 		}
 		quiz := board{}
-		for j := 0; j < len(tmp); j++ {
-			num := tmp[j] - '0'
+		for j := 0; j < len(buf); j++ {
+			num := buf[j] - '0'
 			quiz[j] = uint8(num)
 		}
 		quizzes[i] = quiz
@@ -86,12 +85,12 @@ func read(file string, rows int) ([]board, []board) {
 		}
 
 		// 回答
-		if _, err := io.ReadFull(reader, tmp); err != nil {
+		if _, err := io.ReadFull(reader, buf); err != nil {
 			panic(err)
 		}
 		solution := board{}
 		for j := 0; j < len(solution); j++ {
-			num := tmp[j] - '0'
+			num := buf[j] - '0'
 			solution[j] = uint8(num)
 		}
 		solutions[i] = solution
@@ -103,6 +102,15 @@ func read(file string, rows int) ([]board, []board) {
 	}
 
 	return quizzes, solutions
+}
+
+func valid(answer, solution board) bool {
+	for i := 0; i < len(answer); i++ {
+		if answer[i] != solution[i] {
+			return false
+		}
+	}
+	return true
 }
 
 func export(answer board) {

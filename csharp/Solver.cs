@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Numerics;
 
 namespace Sudoku
 {
@@ -43,9 +42,8 @@ namespace Sudoku
                         return null;
                     }
 
-                    int highest = HighestOneBit(c);
                     int lowest = LowestOneBit(c);
-                    if (highest == lowest)
+                    if (c == lowest)
                     {
                         sudoku.Update(i, ToNum(lowest));
                         updated = true;
@@ -68,7 +66,7 @@ namespace Sudoku
                     continue;
                 }
 
-                int c = BitOperations.PopCount((uint)sudoku.GetCandidateBit(i));
+                int c = BitCount(sudoku.GetCandidateBit(i));
                 if (c < count)
                 {
                     count = c;
@@ -99,9 +97,19 @@ namespace Sudoku
             return null;
         }
 
-        private static int HighestOneBit(int i)
+
+        private static int BitCount(int value)
         {
-            return i & (int.MinValue >> BitOperations.LeadingZeroCount((uint)i));
+            int sum = 0;
+            for (int i = 0; i < 9; i++)
+            {
+                if ((value & 1 << i) != 0)
+                {
+                    sum++;
+                }
+            }
+
+            return sum;
         }
 
         private static int LowestOneBit(int i)
