@@ -86,8 +86,8 @@ public class Main {
 
 	private static void export(byte[] answer) {
 		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < answer.length; i++) {
-			sb.append(answer[i]);
+		for (byte b : answer) {
+			sb.append(b);
 		}
 		System.out.print(sb + "\n");
 	}
