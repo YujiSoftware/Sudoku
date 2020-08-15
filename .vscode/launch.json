@@ -5,13 +5,39 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch",
+            "name": "Python",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceRoot}/python/main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "${workspaceRoot}/sudoku.csv",
+                "1"
+            ]
+        },
+        {
+            "name": "Go",
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${workspaceFolder}/go",
+            "program": "${workspaceRoot}/go",
             "env": {},
-            "args": ["${workspaceFolder}/sudoku.csv", "1000000"]
+            "args": [
+                "${workspaceRoot}/sudoku.csv",
+                "1000000"
+            ]
+        },
+        {
+            "name": "Ruby",
+            "type": "Ruby",
+            "request": "launch",
+            "program": "${workspaceRoot}/ruby/main.rb",
+            "cwd": "${workspaceRoot}/ruby",
+            "env": {},
+            "args": [
+                "${workspaceRoot}/sudoku.csv",
+                "1000000"
+            ]
         }
     ]
 }

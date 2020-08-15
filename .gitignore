@@ -1,5 +1,6 @@
 *.txt
 *.exe
+.vscode/settings.json
 
 ### Eclipse.gitignore ###
 .metadata
