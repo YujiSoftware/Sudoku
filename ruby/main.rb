@@ -1,5 +1,5 @@
 require 'benchmark'
-require './solver'
+require_relative 'solver'
 
 def read(file, quizzes, solutions)
     File.open(file) do |f|
