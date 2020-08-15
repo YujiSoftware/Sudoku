@@ -19,7 +19,7 @@ class Solver
             updated = false
             solved = true
 
-            for i in 0...(9*9) do
+            for i in 0...sudoku.answer.length do
                 if sudoku.answer[i] != 0 then
                     next
                 end
@@ -51,14 +51,14 @@ class Solver
 
             c = bitCount(sudoku.getCandidateBit(i))
             if c < count then
-                count = candidate
+                count = c
                 index = i
             end
         end
 
         candidate = sudoku.getCandidateBit(index)
         for i in 0...9 do
-            bit = candidate & 1 << i
+            bit = candidate & (1 << i)
             if bit == 0 then
                 next
             end

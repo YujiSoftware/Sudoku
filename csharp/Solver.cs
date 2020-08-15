@@ -28,7 +28,7 @@ namespace Sudoku
                 updated = false;
                 solved = true;
 
-                for (int i = 0; i < 9 * 9; i++)
+                for (int i = 0; i < sudoku.Answer.Length; i++)
                 {
                     if (sudoku.Answer[i] != 0)
                     {

@@ -19,7 +19,7 @@ public class Solver {
 			updated = false;
 			solved = true;
 
-			for (int i = 0; i < 9 * 9; i++) {
+			for (int i = 0; i < sudoku.answer.length; i++) {
 				if (sudoku.answer[i] != 0) {
 					continue;
 				}
