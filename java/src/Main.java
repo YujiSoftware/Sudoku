@@ -1,5 +1,5 @@
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
@@ -31,34 +31,30 @@ public class Main {
 
 	private static void read(String file, byte[][] quizzes, byte[][] solutions)
 			throws IOException {
-		try (Reader reader = Files.newBufferedReader(Paths.get(file))) {
+		try (BufferedReader reader = Files.newBufferedReader(Paths.get(file))) {
 			// 1行目をスキップ
-			while (reader.read() != '\n')
-				;
+			reader.readLine();
 
-			char[] buf = new char[9 * 9];
 			for (int i = 0; i < quizzes.length; i++) {
+				char[] line = reader.readLine().toCharArray();
+				int index = 0;
+
 				// 問題
-				reader.read(buf, 0, buf.length);
-				byte[] quiz = new byte[buf.length];
-				for (int j = 0; j < buf.length; j++) {
-					quiz[j] = (byte) (buf[j] - '0');
+				byte[] quiz = new byte[81];
+				for (int j = 0; j < quiz.length; j++) {
+					quiz[j] = (byte) (line[index++] - '0');
 				}
 				quizzes[i] = quiz;
 
-				// カンマ (読み捨て)
-				reader.read();
+				// カンマ
+				index++;
 
 				// 回答
-				reader.read(buf, 0, buf.length);
-				byte[] solution = new byte[buf.length];
-				for (int j = 0; j < buf.length; j++) {
-					solution[j] = (byte) (buf[j] - '0');
+				byte[] solution = new byte[81];
+				for (int j = 0; j < solution.length; j++) {
+					solution[j] = (byte) (line[index++] - '0');
 				}
 				solutions[i] = solution;
-
-				// 改行 (読み捨て)
-				reader.read();
 			}
 		}
 	}

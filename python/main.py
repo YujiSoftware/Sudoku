@@ -7,23 +7,23 @@ def read(path, quizzes, solutions):
     with open(path, "rb") as f:
         f.readline()
 
-        buf = bytearray(9 * 9)
         for i in range(len(quizzes)):
-            f.readinto(buf)
-            quiz = [0] * len(buf)
-            for j in range(len(buf)):
-                quiz[j] = buf[j] - ord("0")
+            line = f.readline()
+            index = 0
+
+            quiz = [0] * 81
+            for j in range(len(quiz)):
+                quiz[j] = line[index] - 48 # = ord("0")
+                index += 1
             quizzes[i] = quiz
 
-            f.read(1)
+            index += 1
 
-            f.readinto(buf)
-            solution = [0] * len(buf)
-            for j in range(len(buf)):
-                solution[j] = buf[j] - ord("0")
+            solution = [0] * 81
+            for j in range(len(solution)):
+                solution[j] = line[index] - 48  # = ord("0")
+                index += 1
             solutions[i] = solution
-
-            f.read(1)
 
 def solve(quizzes, solutions):
     for i in range(len(quizzes)):

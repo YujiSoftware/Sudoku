@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"io"
 	"os"
 	"strconv"
 	"strings"
@@ -56,49 +55,44 @@ func read(file string, rows int) ([]board, []board) {
 	reader := bufio.NewReader(fp)
 
 	// 1行目をスキップ
-	for {
-		b, err := reader.ReadByte()
-		if err != nil {
-			panic(err)
-		}
-		if b == '\n' {
-			break
-		}
+	if _, _, err := reader.ReadLine(); err != nil {
+		panic(err)
 	}
 
-	buf := make([]byte, 81)
+	line := make([]byte, 0, 81+1+81)
 	for i := 0; i < rows; i++ {
-		// 問題
-		if _, err := io.ReadFull(reader, buf); err != nil {
-			panic(err)
+		line = line[:0]
+		isPrefix := true
+		for isPrefix {
+			var buf []byte
+			buf, isPrefix, err = reader.ReadLine()
+			if err != nil {
+				panic(err)
+			}
+
+			line = append(line, buf...)
 		}
+
+		index := 0
+
+		// 問題
 		quiz := board{}
-		for j := 0; j < len(buf); j++ {
-			num := buf[j] - '0'
-			quiz[j] = uint8(num)
+		for j := 0; j < len(quiz); j++ {
+			quiz[j] = uint8(line[index] - '0')
+			index++
 		}
 		quizzes[i] = quiz
 
-		// カンマ (読み捨て)
-		if _, err := reader.ReadByte(); err != nil {
-			panic(err)
-		}
+		// カンマ
+		index++
 
 		// 回答
-		if _, err := io.ReadFull(reader, buf); err != nil {
-			panic(err)
-		}
 		solution := board{}
 		for j := 0; j < len(solution); j++ {
-			num := buf[j] - '0'
-			solution[j] = uint8(num)
+			solution[j] = uint8(line[index] - '0')
+			index++
 		}
 		solutions[i] = solution
-
-		// 改行 (読み捨て)
-		if _, err := reader.ReadByte(); err != nil {
-			panic(err)
-		}
 	}
 
 	return quizzes, solutions

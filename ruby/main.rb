@@ -3,33 +3,30 @@ require_relative 'solver'
 
 def read(file, quizzes, solutions)
     File.open(file) do |f|
-        while(f.getc != "\n") do
-        end
+        f.readline
 
-        buf = "x" * 9 * 9
         for i in 0...quizzes.length do
-            # 問題
-            buf = f.read(buf.length, buf)
+            line = f.readline
+            index = 0
 
-            quiz = Array.new(buf.length)
-            for j in 0...buf.length do
-                quiz[j] = buf[j].to_i
+            # 問題
+            quiz = Array.new(81)
+            for j in 0...quiz.length do
+                quiz[j] = line[index].ord - 48  # = '0'
+                index += 1
             end
             quizzes[i] = quiz
 
-            # カンマ（読み捨て）
-            f.getc
+            # カンマ
+            index += 1
 
             # 回答
-            buf = f.read(buf.length, buf)
-            solution = Array.new(buf.length)
-            for j in 0...buf.length do
-                solution[j] = buf[j].to_i
+            solution = Array.new(81)
+            for j in 0...solution.length do
+                solution[j] = line[index].ord - 48  # = '0'
+                index += 1
             end
             solutions[i] = solution
-
-            # 改行（読み捨て）
-            f.getc
         end
     end
 end

@@ -33,36 +33,31 @@ namespace Sudoku
             using (var reader = new StreamReader(file))
             {
                 // 1行目をスキップ
-                while (reader.Read() != '\n')
-                    ;
+                reader.ReadLine();
 
                 for (int i = 0; i < quizzes.Length; i++)
                 {
-                    var tmp = new char[9 * 9];
+                    char[] line = reader.ReadLine().ToCharArray();
+                    int index = 0;
 
                     // 問題
-                    reader.Read(tmp, 0, tmp.Length);
-                    var quiz = new byte[tmp.Length];
-                    for (int j = 0; j < tmp.Length; j++)
+                    var quiz = new byte[81];
+                    for (int j = 0; j < quiz.Length; j++)
                     {
-                        quiz[j] = (byte)(tmp[j] - '0');
+                        quiz[j] = (byte)(line[index++] - '0');
                     }
                     quizzes[i] = quiz;
 
-                    // カンマ (読み捨て)
-                    reader.Read();
+                    // カンマ
+                    index++;
 
                     // 回答
-                    reader.Read(tmp, 0, tmp.Length);
-                    var solution = new byte[tmp.Length];
-                    for (int j = 0; j < tmp.Length; j++)
+                    var solution = new byte[81];
+                    for (int j = 0; j < solution.Length; j++)
                     {
-                        solution[j] = (byte)(tmp[j] - '0');
+                        solution[j] = (byte)(line[index++] - '0');
                     }
                     solutions[i] = solution;
-
-                    // 改行 (読み捨て)
-                    reader.Read();
                 }
 
             }

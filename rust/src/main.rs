@@ -1,6 +1,8 @@
+use std::io::BufRead;
 use std::env;
 use std::fs::File;
-use std::io::Read;
+use std::io::BufReader;
+use std::io;
 use std::time::Instant;
 
 use sudoku::solver;
@@ -13,7 +15,7 @@ fn main() {
 
     eprintln!("Start read...");
     let start_read = Instant::now();
-    let (quizzes, solutions) = read(file, rows);
+    let (quizzes, solutions) = read(file, rows).expect("Can't read.");
     let read_time = start_read.elapsed();
 
     eprintln!("Start resolve...");
@@ -24,48 +26,41 @@ fn main() {
     eprintln!("{}ms\t{}ms", read_time.as_millis(), solve_time.as_millis());
 }
 
-fn read(file: &String, rows: usize) -> (Box<[solver::Board]>, Box<[solver::Board]>) {
+fn read(file: &String, rows: usize) -> io::Result<(Box<[solver::Board]>, Box<[solver::Board]>)> {
     let mut quizzes: Vec<solver::Board> = Vec::with_capacity(rows);
     let mut solutions: Vec<solver::Board> = Vec::with_capacity(rows);
 
-    let mut f = File::open(file).expect("file not found");
+    let f = File::open(file)?;
+    let mut reader = BufReader::new(f);
 
     // 1行目をスキップ
-    let mut one = [0];
-    while let Ok(_) = f.read(&mut one) {
-        if one[0] as char == '\n' {
-            break;
-        }
-    }
+    let mut buffer = String::new();
+    reader.read_line(&mut buffer)?;
 
-    let mut buf = [0; 81];
     for _i in 0..rows {
+        buffer = String::new();
+        reader.read_line(&mut buffer)?;
+        let mut line = buffer.chars();
+
         // 問題
-        f.read(&mut buf).expect("Can't read.");
         let mut quiz: solver::Board = [0; solver::N_BOARD];
         for j in 0..quiz.len() {
-            let num = buf[j] - '0' as u8;
-            quiz[j] = num;
+            quiz[j] = (line.next().unwrap() as u8) - b'0';
         }
         quizzes.push(quiz);
 
-        // カンマ（読み捨て）
-        f.read(&mut one).expect("Can't read.");
+        // カンマ
+        line.next();
 
         // 回答
-        f.read(&mut buf).expect("Can't read.");
         let mut solution: solver::Board = [0; solver::N_BOARD];
         for j in 0..solution.len() {
-            let num = buf[j] - '0' as u8;
-            solution[j] = num;
+            solution[j] = (line.next().unwrap() as u8) - b'0';
         }
         solutions.push(solution);
-
-        // 改行（読み捨て）
-        f.read(&mut one).expect("Can't read.");
     }
 
-    return (quizzes.into_boxed_slice(), solutions.into_boxed_slice());
+    return Ok((quizzes.into_boxed_slice(), solutions.into_boxed_slice()));
 }
 
 fn solve(quizzes: Box<[solver::Board]>, solutions: Box<[solver::Board]>) {
