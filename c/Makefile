@@ -1,17 +1,15 @@
-pwd       := $(dir $(abspath $(firstword $(MAKEFILE_LIST))))
-top_dir   := $(dir $(abspath $(pwd)))
-CC = gcc
-CFLAGS = -O4
-OBJS = main.o solver.o
-PROGRAM = sudoku
-
-all: $(PROGRAM)
-
-$(PROGRAM): $(OBJS)
-	$(CC) $(OBJS) $(LDFLAGS) -o $(PROGRAM)
-
-clean:;	rm -f *.o *~ $(PROGRAM)
+CC      := gcc
+CFLAGS  := -Wall -O4
+OBJS    := main.o solver.o
+PROGRAM := sudoku
+ARGS    := ../sudoku.csv 1000000
 
 run: $(PROGRAM)
-	./$(PROGRAM) $(top_dir)/sudoku.csv 1000000
+	./$(PROGRAM) $(ARGS)
+
+$(PROGRAM): $(OBJS)
+	$(CC) $(OBJS) $(CFLAGS) -o $(PROGRAM)
+
+clean:;	rm -f *.o *~ $(PROGRAM)
+version:; gcc --version
 
