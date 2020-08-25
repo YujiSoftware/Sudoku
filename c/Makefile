@@ -3,9 +3,11 @@ CFLAGS  := -Wall -O4
 OBJS    := main.o solver.o
 PROGRAM := sudoku
 ARGS    := ../sudoku.csv 1000000
+LANG    := c
+TIME    := \time -f '$(LANG)\t%e'
 
 run: $(PROGRAM)
-	./$(PROGRAM) $(ARGS)
+	$(TIME) ./$(PROGRAM) $(ARGS)
 
 $(PROGRAM): $(OBJS)
 	$(CC) $(OBJS) $(CFLAGS) -o $(PROGRAM)

@@ -1,9 +1,11 @@
 SRC     := *.go
 PROGRAM := sudoku
 ARGS    := ../sudoku.csv 1000000
+LANG    := go
+TIME    := \time -f '$(LANG)\t%e'
 
 run: $(PROGRAM)
-	./$(PROGRAM) $(ARGS)
+	$(TIME) ./$(PROGRAM) $(ARGS)
 
 $(PROGRAM): $(SRC)
 	go build -o $(PROGRAM)

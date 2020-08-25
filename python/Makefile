@@ -1,7 +1,9 @@
 ARGS    := ../sudoku.csv 1000000
+LANG    := python
+TIME    := \time -f '$(LANG)\t%e'
 
 run: 
-	python3 main.py $(ARGS)
+	$(TIME) python3 main.py $(ARGS)
 
 clean:;
 version:; python3 --version

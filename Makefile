@@ -1,14 +1,14 @@
-LANG := c go java csharp rust ruby python
+DIRS := c go rust java csharp ruby python
 
 run:
-	# Cache
-	cat sudoku.csv > /dev/null
-	# Run	
-	@for lang in $(LANG); do \
-		make -C $$lang run; \
+	@# Cache
+	@cat sudoku.csv > /dev/null
+	@# Run	
+	@for dir in $(DIRS); do \
+		make -C $$dir run; \
     	done
 
 version:
-	@for lang in $(LANG); do \
-		make -C $$lang version; \
+	@for dir in $(DIRS); do \
+		make -C $$dir version; \
 	done
