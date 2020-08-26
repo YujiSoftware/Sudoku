@@ -11,6 +11,10 @@ vagrant up
 vagrant ssh
 ```
 
+## 使用するデータ
+
+[Kaggle から数独のデータセット](https://www.kaggle.com/bryanpark/sudoku/version/3)をダウンロードして、sudoku.csv として配置してください。
+
 ## 実行方法
 
 ```sh
